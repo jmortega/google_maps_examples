@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>Ejemplo API JavaScript Google Maps</title>
+    <script src="http://maps.google.com/maps?file=api&v=2&key=ABQIAAAAUUbCon4Ayh_gs__LbWfUaBQHP74IBn2gHUAASieppznwtu1SWhTVsm_A0fUIq7IuHAsqv7KhsU9POQ"
+      type="text/javascript"></script>
+    <script type="text/javascript">
+
+    //<![CDATA[
+
+   var geocoder;
+   var map;
+
+ var lugar = "Amsterdam";
+ var address = "Amsterdam";
+
+
+   // Al cargarse una página, llama a esta función
+
+   function load()
+   {
+      // Crear un nuevo objeto map
+      map = new GMap2(document.getElementById("map"));
+	  map.addControl(new GLargeMapControl());
+	  map.addControl(new GMapTypeControl());
+	
+	  
+
+      // Crear un nuevo objeto geocoding
+      geocoder = new GClientGeocoder();
+
+      // Recuperar información sobre Localización, pasársela a addToMap()
+      geocoder.getLocations(address, addToMap);
+   }
+
+   // Esta función añade el punto al mapa
+
+   function addToMap(response)
+   {
+      // Recuperar el objeto
+      place = response.Placemark[0];
+
+      // Recuperar la latitud y la longitud
+      point = new GLatLng(place.Point.coordinates[1],
+                          place.Point.coordinates[0]);
+
+      // Centrar el mapa en este punto
+	  
+      map.setCenter(point, 13);
+
+      // Crear un marcador
+      marker = new GMarker(point);
+
+      // Añadir el marcador al mapa
+      map.addOverlay(marker);
+
+      // Añadir información de la dirección al marcador
+      marker.openInfoWindowHtml(place.address);
+	  // Add address information to marker
+marker.openInfoWindowHtml(lugar + '<br />' + 
+   place.address + '<br />');
+   }
+
+    //]]>
+    </script>
+  </head>
+  <body onload="load()" onunload="GUnload()">
+    <div id="map" style="width: 800px; height: 600px"></div>
+  </body>
+</html>
